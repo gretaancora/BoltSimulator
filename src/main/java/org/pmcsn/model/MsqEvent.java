@@ -6,41 +6,27 @@ public class MsqEvent {
     public EventType type; //type
     public int serverId;
     public int nodeId;
-    public boolean hasPriority = false;     //if the event has priority
     public boolean isFeedback;
     public int postiRichiesti;
 
-    public MsqEvent(EventType type, double time, double service, int serverId, int nodeId,  boolean hasPriority) {
+    public MsqEvent(EventType type, double time, double service, int serverId, int nodeId) {
         this.type = type;
         this.service = service;
         this.time = time;
         this.serverId = serverId;
         this.nodeId = nodeId;
-        this.hasPriority = hasPriority;
-    }
-
-    public MsqEvent(EventType type, double time, int serverId, boolean hasPriority) {
-        this(type, time, 0, serverId, 0, hasPriority);
-    }
-
-    public MsqEvent(EventType eventType, double time, double service, int serverId, int nodeId) {
-        this(eventType, time, service, serverId, nodeId, false);
     }
 
     public MsqEvent(EventType type, double time, int serverId) {
-        this(type, time, 0, serverId, 0, false);
+        this(type, time, 0, serverId, 0);
     }
 
     public MsqEvent(EventType type, double time) {
-        this(type, time, 0, false);
-    }
-
-    public MsqEvent(EventType type, double time, boolean hasPriority) {
-        this(type, time, 0, hasPriority);
+        this(type, time, 0);
     }
 
     public MsqEvent(EventType type, double time, double service, int serverId) {
-        this(type, time, service, serverId, 0,false);
+        this(type, time, service, serverId, 0);
     }
 
     public MsqEvent(EventType type, double time, double service) {

@@ -5,16 +5,6 @@ import org.pmcsn.libraries.Rngs;
 
 public class ProbabilitiesUtils {
 
-    public static boolean isAcceptedSysScoring(Rngs rngs, int streamIndex){
-        ConfigurationManager conf = new ConfigurationManager();
-        return generateProbability(conf.getDouble("sysScoringAutomaticoSANTANDER", "pAccept"), rngs, streamIndex);
-    }
-
-    public static boolean isAcceptedComitato(Rngs rngs, int streamIndex) {
-        ConfigurationManager conf = new ConfigurationManager();
-        return generateProbability(0.06, conf.getDouble("comitatoCreditoSANTANDER", "pAccept") + 0.06, rngs, streamIndex);
-    }
-
     public static boolean isFeedback(Rngs rngs, int streamIndex){
         ConfigurationManager conf = new ConfigurationManager();
         return generateProbability(conf.getDouble("comitatoCreditoSANTANDER", "pFeedback"), rngs, streamIndex);

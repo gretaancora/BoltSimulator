@@ -154,7 +154,6 @@ public class PrintUtils {
         System.out.println(BRIGHT_RED + "3" + RESET + ". Simple Simulation VERIFICATION");
         System.out.println(BRIGHT_RED + "4" + RESET + ". Improved Model Simulation Finite Horizon");
         System.out.println(BRIGHT_RED + "5" + RESET + ". Improved Model Simulation Infinite Horizon");
-        System.out.println(BRIGHT_RED + "6" + RESET + ". Improved Model Simulation VERIFICATION");
 
         System.out.print(BRIGHT_RED + "Enter the simulation type number: " + RESET);
     }

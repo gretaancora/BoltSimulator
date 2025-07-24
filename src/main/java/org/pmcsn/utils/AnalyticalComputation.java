@@ -60,44 +60,6 @@ public class AnalyticalComputation {
         return (numerator / denominator) * p0;
     }
 
-    public static AnalyticalResult infiniteServer(String centerName, double lambda, double Es) {
-        double rho = lambda * Es;
-        rho = 1 - Math.exp(-rho);
-        double Etq, Enq, Ets, Ens;
-
-        if (rho >= 1) {
-            Etq = Double.POSITIVE_INFINITY;
-            Enq = Double.POSITIVE_INFINITY;
-            Ets = Double.POSITIVE_INFINITY;
-            Ens = Double.POSITIVE_INFINITY;
-        } else {
-            Etq = 0;
-            Enq = 0;
-            Ets = Es;
-            Ens = Ets * lambda;
-        }
-        AnalyticalResult analyticalResult = new AnalyticalResult(lambda, rho, Etq, Enq, Ets, Ens, centerName, Es);
-        //printResult(analyticalResult);
-        return analyticalResult;
-    }
-
-    public static AnalyticalResult singleServer(String centerName, double lambda, double Es) {
-        double rho = lambda * Es;
-        double Etq, Enq, Ets, Ens;
-        if (rho >= 1) {
-            Etq = Double.POSITIVE_INFINITY;
-            Enq = Double.POSITIVE_INFINITY;
-            Ets = Double.POSITIVE_INFINITY;
-            Ens = Double.POSITIVE_INFINITY;
-        } else {
-            Etq = (rho * Es) / (1 - rho);
-            Enq = Etq * lambda;
-            Ets = Etq + Es;
-            Ens = Ets * lambda;
-        }
-        return new AnalyticalResult(lambda, rho, Etq, Enq, Ets, Ens, centerName, Es);
-    }
-
     public static AnalyticalResult multiServer(String centerName, double lambda, double Esi, int numServers) {
         double Es = Esi / numServers;
         double rho = lambda * Es;
@@ -123,40 +85,32 @@ public class AnalyticalComputation {
         List<AnalyticalResult> analyticalResults = new ArrayList<>();
         ConfigurationManager conf = new ConfigurationManager();
 
-        double pFeedback = config.getDouble("comitatoCreditoSANTANDER", "pFeedback");
+        /*double pFeedback = config.getDouble("simpleCenter", "pFeedback");
         //double pFeedback = 0.05;
         double pAcceptSysScoring = conf.getDouble("sysScoringAutomaticoSANTANDER", "pAccept");
-        double pAcceptCredito = conf.getDouble("comitatoCreditoSANTANDER", "pAccept");
 
         double gamma = 1 / config.getDouble("general", "interArrivalTime");
-        double lambda = gamma / (1 - (pFeedback * pAcceptSysScoring));
+        double lambda = gamma / (1 - (pFeedback * pAcceptSysScoring));*/
+        double lambda = -1; //da rivedere calcolo lambda
 
-        // REPARTO ISTRUTTORIE
         analyticalResults.add(multiServer(
-                config.getString("repartoIstruttorieMAAC", "centerName"),
+                config.getString("smallCenter", "centerName"),
                 lambda,
-                config.getDouble("repartoIstruttorieMAAC", "meanServiceTime"),
-                config.getInt("repartoIstruttorieMAAC", "serversNumber")));
+                config.getDouble("smallCenter", "meanServiceTime"),
+                config.getInt("smallCenter", "serversNumber")));
 
-        // SISTEMA SCORING AUTOMATICO
-        analyticalResults.add(singleServer(
-                config.getString("sysScoringAutomaticoSANTANDER", "centerName"),
+        analyticalResults.add(multiServer(
+                config.getString("mediumCenter", "centerName"),
                 lambda,
-                config.getDouble("sysScoringAutomaticoSANTANDER", "meanServiceTime")));
+                config.getDouble("mediumCenter", "meanServiceTime"),
+                config.getInt("mediumCenter", "serversNumber")));
 
-        // COMITATO CREDITO
-        analyticalResults.add(infiniteServer(
-                config.getString("comitatoCreditoSANTANDER", "centerName"),
-                lambda * pAcceptSysScoring,
-                config.getDouble("comitatoCreditoSANTANDER", "meanServiceTime")));
+        analyticalResults.add(multiServer(
+                config.getString("largeCenter", "centerName"),
+                lambda,
+                config.getDouble("largeCenter", "meanServiceTime"),
+                config.getInt("largeCenter", "serversNumber")));
 
-        // REPARTO LIQUIDAZIONI
-        analyticalResults.add(singleServer(
-                config.getString("repartoLiquidazioniMAAC", "centerName"),
-                lambda * pAcceptSysScoring * pAcceptCredito,
-                config.getDouble("repartoLiquidazioniMAAC", "meanServiceTime")));
-
-        writeAnalyticalResults(simulationType, analyticalResults);
 
         return(analyticalResults);
     }
@@ -175,37 +129,29 @@ public class AnalyticalComputation {
         double gamma = 1 / config.getDouble("general", "interArrivalTime");
         double lambda = (gamma*pAcceptPreScoring) / (1 - (pFeedback * pAcceptSysScoring));
 
-        // PRE-SCORING (nel primo centro non c'è feedback ma entra il lambda originario che è gamma)
         analyticalResults.add(multiServer(
-                config.getString("preScoringMAAC", "centerName"),
-                gamma,
-                config.getDouble("preScoringMAAC", "meanServiceTime"),
-                config.getInt("preScoringMAAC", "serversNumber")));
+                config.getString("smallCenter", "centerName"),
+                lambda,
+                config.getDouble("smallCenter", "meanServiceTime"),
+                config.getInt("smallCenter", "serversNumber")));
 
-        // REPARTO ISTRUTTORIE
         analyticalResults.add(multiServer(
-                config.getString("repartoIstruttorieMAAC", "centerName"),
+                config.getString("mediumCenter", "centerName"),
                 lambda,
-                config.getDouble("repartoIstruttorieMAAC", "meanServiceTimeImproved"),
-                config.getInt("repartoIstruttorieMAAC", "serversNumberImproved")));
+                config.getDouble("mediumCenter", "meanServiceTime"),
+                config.getInt("mediumCenter", "serversNumber")));
 
-        // SISTEMA SCORING AUTOMATICO
-        analyticalResults.add(singleServer(
-                config.getString("sysScoringAutomaticoSANTANDER", "centerName"),
+        analyticalResults.add(multiServer(
+                config.getString("largeCenter", "centerName"),
                 lambda,
-                config.getDouble("sysScoringAutomaticoSANTANDER", "meanServiceTime")));
+                config.getDouble("largeCenter", "meanServiceTime"),
+                config.getInt("largeCenter", "serversNumber")));
 
-        // COMITATO CREDITO
-        analyticalResults.add(infiniteServer(
-                config.getString("comitatoCreditoSANTANDER", "centerName"),
-                lambda * pAcceptSysScoring,
-                config.getDouble("comitatoCreditoSANTANDER", "meanServiceTime")));
-
-        // REPARTO LIQUIDAZIONI
-        analyticalResults.add(singleServer(
-                config.getString("repartoLiquidazioniMAAC", "centerName"),
-                lambda * pAcceptSysScoring * pAcceptCredito,
-                config.getDouble("repartoLiquidazioniMAAC", "meanServiceTime")));
+        analyticalResults.add(multiServer(
+                config.getString("rideCenter", "centerName"),
+                lambda,
+                config.getDouble("rideCenter", "meanServiceTimeImproved"),
+                config.getInt("rideCenter", "serversNumberImproved")));
 
         writeAnalyticalResults(simulationType, analyticalResults);
 

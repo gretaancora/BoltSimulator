@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Observations {
-    public enum INDEX {
-        RESPONSE_TIME;
-    }
     private final String centerName;
     private final List<Double> observations;
 

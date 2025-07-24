@@ -69,9 +69,6 @@ public class BoltSimulator {
             case 5:
                 ModelVerificationBatchMeans.runModelWithBatchMeansMethodImproved();
                 break;
-            case 6:
-                ModelVerificationBatchMeans.runModelVerificationWithBatchMeansMethodImproved();
-                break;
             default:
                 printError("Invalid simulation type '" + simulationType + "'.");
         }

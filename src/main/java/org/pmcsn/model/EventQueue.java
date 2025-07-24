@@ -15,14 +15,6 @@ public class EventQueue {
         noPriority.add(event);
     }
 
-    public void addPriority(MsqEvent event) {
-        if (event.hasPriority) {
-            priority.getFirst().add(event);
-        } else {
-            priority.getLast().add(event);
-        }
-    }
-
     public boolean isEmpty() {
         return noPriority.isEmpty() && priority.stream().allMatch(AbstractCollection::isEmpty);
     }
