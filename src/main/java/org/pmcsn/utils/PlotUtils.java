@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,7 +95,7 @@ public class PlotUtils {
         }
     }
 
-    private static List<Double> finiteSimulationPlot(List<List<Double>> matrix) {
+    /*private static List<Double> finiteSimulationPlot(List<List<Double>> matrix) {
         int minSize = matrix.stream().mapToInt(List::size).min().orElseThrow();
         List<Double> averages = new ArrayList<>();
         for (int i = 0; i < minSize; i++) {
@@ -104,6 +105,36 @@ public class PlotUtils {
             }
             averages.add(sum / matrix.size());
         }
+        return averages;
+    }*/
+
+    private static List<Double> finiteSimulationPlot(List<List<Double>> matrix) {
+        // Controlli preliminari
+        if (matrix == null || matrix.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Trova la dimensione minima delle righe; se nessuna riga, minSize = 0
+        int minSize = matrix.stream()
+                .mapToInt(List::size)
+                .min()
+                .orElse(0);
+
+        // Se la dimensione minima è zero, non ci sono dati effettivi per la media
+        if (minSize == 0) {
+            return Collections.emptyList();
+        }
+
+        // Calcolo delle medie colonna per colonna
+        List<Double> averages = new ArrayList<>(minSize);
+        for (int i = 0; i < minSize; i++) {
+            double sum = 0.0;
+            for (List<Double> row : matrix) {
+                sum += row.get(i);
+            }
+            averages.add(sum / matrix.size());
+        }
+
         return averages;
     }
 

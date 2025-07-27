@@ -74,9 +74,13 @@ public abstract class AbstractStatistics {
             meanServiceTime = Arrays.stream(sum)
                     .filter(s -> s.served > 0)
                     .mapToDouble(s -> s.service / s.served)
-                    .average().orElseThrow();
+                    .average().orElse(0.0);
             // mean utilization (ρ)
-            utilization = (lambda * meanServiceTime) / sum.length;
+            if (meanServiceTime == 0.0) {
+                utilization = 0.0;
+            }else{
+                utilization = (lambda * meanServiceTime) / sum.length;
+            }
         } else {
             // mean service time (E[s])
             meanServiceTime = sum[0].service / sum[0].served;

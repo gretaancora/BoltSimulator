@@ -239,9 +239,9 @@ public class FiniteSimulationRunner {
     }
 
     private void printMeanResponseTime(){
-        System.out.println("Average response time in REPARTO ISTRUTTORIE: "+ smallCenter.getMeanStatistics().meanResponseTime);
-        System.out.println("Average response time in SISTEMA SCORING AUTOMATICO: "+ mediumCenter.getMeanStatistics().meanResponseTime);
-        System.out.println("Average response time in COMITATO CREDITO: " + largeCenter.getMeanStatistics().meanResponseTime);
+        System.out.println("Average response time in SMALL CENTER: "+ smallCenter.getMeanStatistics().meanResponseTime);
+        System.out.println("Average response time in MEDIUM CENTER: "+ mediumCenter.getMeanStatistics().meanResponseTime);
+        System.out.println("Average response time in LARGE CENTER: " + largeCenter.getMeanStatistics().meanResponseTime);
     }
 
     private List<ConfidenceIntervals> aggregateConfidenceIntervals() {
