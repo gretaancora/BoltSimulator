@@ -78,14 +78,23 @@ public class BatchImprovedSimulationRunner {
 
         // the terminating condition is that all the centers have processed all the jobs
         while(!isDone()) {
+            System.out.println("[DEBUG] Ciclo loop principale: isDone() = " + isDone());
             // Retrieving next event to be processed
             MsqEvent event = events.pop();
+            System.out.println("[DEBUG] Evento processato: " + event);
             if (event.type == EventType.SAVE_STAT) {
                 if (!isWarmingUp) {
                     smallCenter.updateObservations(smallCenterObservation);
                     mediumCenter.updateObservations(mediumCenterObservation);
                     largeCenter.updateObservations(largeCenterObservation);
                     rideCenter.updateObservations(rideCenterObservation);
+
+                    System.out.printf("[DEBUG] Batches raccolti: small=%d, medium=%d, large=%d, ride=%d%n",
+                            smallCenterObservation.size(),
+                            mediumCenterObservation.size(),
+                            largeCenterObservation.size(),
+                            rideCenterObservation.size()
+                    );
                 }
                 continue;
             }
@@ -282,6 +291,10 @@ public class BatchImprovedSimulationRunner {
     }
 
     private boolean isDone() {
+        System.out.println("[DEBUG] isDone: small=" + smallCenter.isDone()
+                + ", medium=" + mediumCenter.isDone()
+                + ", large=" + largeCenter.isDone()
+                + ", ride=" + rideCenter.isDone());
         return smallCenter.isDone()
                 && mediumCenter.isDone()
                 && largeCenter.isDone()

@@ -59,6 +59,7 @@ public class RideCenter extends MultiServer{
     @Override
     public void spawnCompletionEvent(MsqTime time, EventQueue queue, int serverId, MsqEvent currEvent) {
         double service = getService(streamIndex);
+        System.out.printf("[DEBUG][RideCenter.spawnCompletion] server=%d, richiesti=%d, servizio=%.3f%n", serverId, currEvent.postiRichiesti, service);
         MsqEvent event;
 
         //generate a new completion event
@@ -76,6 +77,7 @@ public class RideCenter extends MultiServer{
         servers[serverId].numRichiesteServite ++;
 
         queue.add(event);
+        System.out.printf("[DEBUG][RideCenter.spawnCompletion] evento aggiunto: %s%n", event);
     }
 
     @Override
@@ -124,6 +126,7 @@ public class RideCenter extends MultiServer{
 
     @Override
     public void processArrival(MsqEvent arrival, MsqTime time, EventQueue queue){
+        System.out.printf("[DEBUG][RideCenter.processArrival] time=%.3f, postiRichiesti=%d%n", arrival.time, arrival.postiRichiesti);
         // increment the number of jobs in the node
         numberOfJobsInNode++;
 
@@ -140,8 +143,10 @@ public class RideCenter extends MultiServer{
             lastMatchTime = arrival.time;
         }
 
+        System.out.println("[DEBUG][RideCenter.processArrival] pendingArrivals.size()=" + pendingArrivals.size());
         // se ho superato l'intervallo
         if (arrival.time >= lastMatchTime + matchInterval) {
+            System.out.printf("[DEBUG][RideCenter.processArrival] avvio doMatching, lastMatchTime=%.3f%n", lastMatchTime);
             doMatching(time, queue);
             // aggiorno lastMatchTime per il prossimo ciclo
             lastMatchTime += matchInterval;
@@ -149,8 +154,10 @@ public class RideCenter extends MultiServer{
     }
 
     private void doMatching(MsqTime time, EventQueue queue) {
+        System.out.println("[DEBUG][RideCenter.doMatching] start");
         while (true) {
             int matched = findOne(time, queue);
+            System.out.println("[DEBUG][RideCenter.doMatching] matched=" + matched + ", pending=" + pendingArrivals.size());
             if (matched == 0) {
                 if (!pendingArrivals.isEmpty()) {
                     numberOfJobsInNode --;
@@ -160,6 +167,7 @@ public class RideCenter extends MultiServer{
                 break;
             }
         }
+        System.out.println("[DEBUG][RideCenter.doMatching] end");
     }
 
     private void generateFeedback(MsqEvent oldEvent, EventQueue queue) {
@@ -180,6 +188,7 @@ public class RideCenter extends MultiServer{
 
     @Override
     public int findOne(MsqTime time, EventQueue queue) {
+        System.out.println("[DEBUG][RideCenter.findOne] attempt match");
         if (pendingArrivals.isEmpty()) return 0;
 
         // 1. Prendo la PRIMA richiesta in coda
@@ -201,6 +210,7 @@ public class RideCenter extends MultiServer{
         }
 
         if (bestActive != -1) {
+            System.out.println("[DEBUG][RideCenter.findOne] bestActive=" + bestActive);
             // 2.a Assegno *solo* la prima richiesta a questo server
             spawnCompletionEvent(time, queue, bestActive, firstReq);
             pendingArrivals.poll();
@@ -220,6 +230,7 @@ public class RideCenter extends MultiServer{
             }
         }
         if (bestIdle == -1) {
+            System.out.println("[DEBUG][RideCenter.findOne] no match found");
             return 0;  // né attivi né inattivi hanno accettato
         }
 
@@ -244,6 +255,8 @@ public class RideCenter extends MultiServer{
     //da rivedere
     @Override
     public void processCompletion(MsqEvent completion, MsqTime time, EventQueue queue) {
+        System.out.printf("[DEBUG][RideCenter.processCompletion] server=%d, servizio=%.3f, jobsServed=%d%n",
+                completion.serverId, completion.service, servers[completion.serverId].numRichiesteServite);
         numberOfJobsInNode -= servers[completion.serverId].numRichiesteServite;
 
         if(!isDone()){
@@ -256,6 +269,8 @@ public class RideCenter extends MultiServer{
         sum[serverId].served++;
         lastCompletionTime = completion.time;
         if (!warmup && jobServedPerBatch == batchSize) {
+            System.out.println("[DEBUG][RideCenter.processCompletion] batch completato: jobServedPerBatch=" + jobServedPerBatch);
+            saveBatchStats(time);
             saveBatchStats(time);
         }
 
