@@ -89,7 +89,7 @@ public class Distributions {
      *                    variance = (Exp(b*b) - 1)*Exp(2*a + b*b)
      *
      */
-    public static double truncatedLogNormal(double mu, double sigma, double truncationPoint, Rngs rngs) {
+    public static double truncatedNormal(double mu, double sigma, double truncationPoint, Rngs rngs) {
         Rvms rvms = new Rvms();
         Rvgs rvgs = new Rvgs(rngs);
 
@@ -107,6 +107,6 @@ public class Distributions {
         double u = rvgs.uniform(alpha, 1.0 - beta);
 
         // Calculate the inverse distribution function
-        return rvms.idfLogNormal(a, b, u);
+        return rvms.idfNormal(a, b, u);
     }
 }

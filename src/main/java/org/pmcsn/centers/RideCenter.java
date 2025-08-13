@@ -9,8 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import static org.pmcsn.model.EventType.*;
-import static org.pmcsn.utils.Distributions.exponential;
-import static org.pmcsn.utils.Distributions.truncatedLogNormal;
+import static org.pmcsn.utils.Distributions.*;
 
 public class RideCenter extends MultiServer{
     private final double sigma;
@@ -83,12 +82,7 @@ public class RideCenter extends MultiServer{
     @Override
     double getService(int streamIndex) {
         rngs.selectStream(streamIndex);
-        double serviceTime;
-        if(approximateServiceAsExponential){
-            serviceTime = exponential(meanServiceTime, rngs);
-        } else {
-            serviceTime = truncatedLogNormal(meanServiceTime, sigma, truncationPoint, rngs);
-        }
+        double serviceTime = truncatedNormal(meanServiceTime, sigma, truncationPoint, rngs);
         return serviceTime;
     }
 

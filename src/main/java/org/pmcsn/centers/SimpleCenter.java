@@ -4,8 +4,7 @@ import org.pmcsn.configuration.ConfigurationManager;
 import org.pmcsn.libraries.Rngs;
 import org.pmcsn.model.*;
 
-import static org.pmcsn.utils.Distributions.exponential;
-import static org.pmcsn.utils.Distributions.truncatedLogNormal;
+import static org.pmcsn.utils.Distributions.*;
 
 public class SimpleCenter extends MultiServer{
     private final double sigma;
@@ -42,7 +41,7 @@ public class SimpleCenter extends MultiServer{
         if(approximateServiceAsExponential){
             serviceTime = exponential(meanServiceTime, rngs);
         } else {
-            serviceTime = truncatedLogNormal(meanServiceTime, sigma, truncationPoint, rngs);
+            serviceTime = truncatedNormal(meanServiceTime, sigma, truncationPoint, rngs);
         }
         return serviceTime;
     }
