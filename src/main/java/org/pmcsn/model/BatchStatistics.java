@@ -20,7 +20,7 @@ public class BatchStatistics extends AbstractStatistics {
     }
 
     public boolean isBatchRetrievalDone() {
+        /*modificato*/
         return batchRetrievalDone == 7;
     }
-
 }

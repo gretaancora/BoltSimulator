@@ -76,6 +76,8 @@ public class BatchImprovedSimulationRunner {
 
         resetCenters(rngs, events);
 
+        boolean stopWarmup = false;
+
         // the terminating condition is that all the centers have processed all the jobs
         while(!isDone()) {
             System.out.println("[DEBUG] Ciclo loop principale: isDone() = " + isDone());
@@ -104,7 +106,15 @@ public class BatchImprovedSimulationRunner {
             updateAreas(msqTime);
 
             // Advancing the clock
+            MsqTime currentTime = new MsqTime();
+            currentTime.current = msqTime.current;
+            // Advancing the clock
             msqTime.current = msqTime.next;
+
+            if (stopWarmup) {
+                stopWarmup(currentTime);
+                stopWarmup = false;
+            }
 
             // Processing the event based on its type
             processCurrentEvent(event, msqTime, events);
@@ -114,7 +124,7 @@ public class BatchImprovedSimulationRunner {
             if (isWarmingUp && getMinimumNumberOfJobsServedByCenters() >= warmupThreshold ) {
                 printSuccess("WARMUP COMPLETED... Starting to collect statistics for centers from now on.");
                 isWarmingUp = false;
-                stopWarmup(msqTime);
+                stopWarmup = true;
             }
         }
 

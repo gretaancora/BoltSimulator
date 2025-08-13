@@ -275,7 +275,10 @@ public class BatchSimulationRunner {
     }
 
     private boolean isDone() {
-        return smallCenter.isDone()
+        System.out.println("[DEBUG] isDone: small=" + smallCenter.isDone()
+                + ", medium=" + mediumCenter.isDone()
+                + ", large=" + largeCenter.isDone());
+                return smallCenter.isDone()
                 && mediumCenter.isDone()
                 && largeCenter.isDone();
     }

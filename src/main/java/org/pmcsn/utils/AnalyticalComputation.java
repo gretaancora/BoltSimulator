@@ -11,7 +11,7 @@ import java.util.List;
 import static org.pmcsn.utils.PrintUtils.printDebug;
 
 public class AnalyticalComputation {
-    private static final ConfigurationManager config = new ConfigurationManager();
+    public static final ConfigurationManager config = new ConfigurationManager();
 
     public static class AnalyticalResult {
         public String name;
