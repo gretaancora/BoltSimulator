@@ -44,7 +44,7 @@ public class FiniteSimulationRunner {
     public void runFiniteSimulation(
             boolean approximateServiceAsExponential,
             boolean shouldTrackObservations) throws Exception {
-        initCenters(approximateServiceAsExponential);
+            initCenters(approximateServiceAsExponential);
 
         System.out.println("[DEBUG] runFiniteSimulation: trackObs=" + shouldTrackObservations);
         String simulationType = getSimulationType(approximateServiceAsExponential);
@@ -79,14 +79,14 @@ public class FiniteSimulationRunner {
 
             MsqEvent event;
             // need to use OR because all the conditions should be false
-            while (!smallCenter.isEndOfArrivals() || !mediumCenter.isEndOfArrivals() || !largeCenter.isEndOfArrivals() || !queue.isEmpty() || number != 0) {
+            while (smallCenter.isEndOfArrivals() || mediumCenter.isEndOfArrivals() || largeCenter.isEndOfArrivals() || queue.isEmpty() || number != 0) {
                 // Retrieving next event to be processed
                 event = queue.pop();
                 if (event.type == EventType.SAVE_STAT) {
-                    System.out.println("[DEBUG] SAVE_STAT at t=" + event.time);
-                    System.out.println("  smallObs size=" + smallCenterObservation.size());
-                    System.out.println("  medObs size="   + mediumCenterObservation.size());
-                    System.out.println("  largObs size="  + largeCenterObservation.size());
+//                    System.out.println("[DEBUG] SAVE_STAT at t=" + event.time);
+//                    System.out.println("  smallObs size=" + smallCenterObservation.size());
+//                    System.out.println("  medObs size="   + mediumCenterObservation.size());
+//                    System.out.println("  largObs size="  + largeCenterObservation.size());
                     smallCenter.updateObservations(smallCenterObservation);
                     mediumCenter.updateObservations(mediumCenterObservation);
                     largeCenter.updateObservations(largeCenterObservation);
@@ -102,7 +102,6 @@ public class FiniteSimulationRunner {
 
                 // Processing the event based on its type
                 processCurrentEvent(event, msqTime, queue);
-
                 number = getTotalNumberOfJobsInSystem();
             }
 

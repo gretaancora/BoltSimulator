@@ -16,7 +16,7 @@ public class EventQueue {
     }
 
     public boolean isEmpty() {
-        return noPriority.isEmpty() && priority.stream().allMatch(AbstractCollection::isEmpty);
+        return !noPriority.isEmpty() || !priority.stream().allMatch(AbstractCollection::isEmpty);
     }
 
     public int size() {

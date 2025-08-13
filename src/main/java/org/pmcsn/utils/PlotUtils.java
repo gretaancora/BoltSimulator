@@ -24,25 +24,38 @@ public class PlotUtils {
         System.out.println("[DEBUG] writeObservations for center="
                 + observationsList.get(0).getCenterName()
                 + " with obsCount=" + observationsList.size());
+
         FileUtils.createDirectoryIfNotExists(path);
         File parent = new File(path);
         List<Double> row = new ArrayList<>();
-        int minSize = observationsList.stream()
-                .mapToInt(x -> x.getPoints().size())
+
+        // Trova la lunghezza massima tra tutte le osservazioni
+        int maxSize = observationsList.stream()
+                .mapToInt(o -> o.getPoints().size())
                 .peek(sz -> System.out.println("  [DEBUG] points size=" + sz))
-                .min().orElseThrow(() -> new RuntimeException("No data to write!"));
-        for (int i = 0; i < minSize; i++) {
+                .max()
+                .orElseThrow(() -> new RuntimeException("No data to write!"));
+
+        // Calcola la media per ogni indice, ignorando le liste più corte
+        for (int i = 0; i < maxSize; i++) {
             double s = 0;
+            int count = 0;
             for (Observations o : observationsList) {
-                s += o.getPoints().get(i);
+                if (i < o.getPoints().size()) {
+                    s += o.getPoints().get(i);
+                    count++;
+                }
             }
-            row.add(s / observationsList.size());
+            row.add(count > 0 ? s / count : 0.0); // se nessun dato, metti 0
         }
-        String centerName = observationsList.getFirst().getCenterName();
-        String[] s = centerName.split("_");
-        centerName = String.join("_", Arrays.copyOfRange(s, 0, s.length - 1));
+
+        String centerName = observationsList.get(0).getCenterName();
+        String[] parts = centerName.split("_");
+        centerName = String.join("_", Arrays.copyOfRange(parts, 0, parts.length - 1));
+
         File file = new File(parent, "%s.data".formatted(centerName));
         writeRow(file, row);
+
         System.out.println("[DEBUG] wrote file " + file.getAbsolutePath()
                 + " with " + row.size() + " columns");
     }

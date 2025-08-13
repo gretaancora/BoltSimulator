@@ -24,10 +24,6 @@ public class BasicStatistics extends AbstractStatistics {
         return probAccept;
     }
 
-    public void addProbAccept(double probAccept) {
-        this.probAccept.add(probAccept);
-    }
-
     public List<Double> getJobServed() {
         return jobServed;
     }

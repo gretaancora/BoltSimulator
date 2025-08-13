@@ -81,7 +81,7 @@ public class FiniteImprovedSimulationRunner {
 
             MsqEvent event;
             // need to use OR because all the conditions should be false
-            while (!smallCenter.isEndOfArrivals() || !mediumCenter.isEndOfArrivals() || !largeCenter.isEndOfArrivals() || !rideCenter.isEndOfArrivals() || !queue.isEmpty()) {
+            while (smallCenter.isEndOfArrivals() || mediumCenter.isEndOfArrivals() || largeCenter.isEndOfArrivals() || !rideCenter.isEndOfArrivals() || queue.isEmpty()) {
 
                 // Retrieving next event to be processed
                 event = queue.pop();
@@ -312,7 +312,7 @@ public class FiniteImprovedSimulationRunner {
             smallCenterObservation.add(new Observations("%s_%d".formatted(smallCenter.getCenterName(), i + 1)));
         }
         mediumCenterObservation = new ArrayList<>();
-        for (int i = 0; i < smallCenter.getServersNumber(); i++) {
+        for (int i = 0; i < mediumCenter.getServersNumber(); i++) {
             mediumCenterObservation.add(new Observations("%s_%d".formatted(mediumCenter.getCenterName(), i + 1)));
         }
         largeCenterObservation = new ArrayList<>();

@@ -21,9 +21,7 @@ public class Area {
         queueArea += area;
     }
 
-    public double getServiceArea() {
-        return serviceArea;
-    }
+    public double getServiceArea() { return serviceArea; }
 
     public void incServiceArea(double area) {
         serviceArea += area;

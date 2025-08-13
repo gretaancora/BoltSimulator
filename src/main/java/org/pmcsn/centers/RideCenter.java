@@ -82,8 +82,7 @@ public class RideCenter extends MultiServer{
     @Override
     double getService(int streamIndex) {
         rngs.selectStream(streamIndex);
-        double serviceTime = truncatedNormal(meanServiceTime, sigma, truncationPoint, rngs);
-        return serviceTime;
+        return truncatedNormal(meanServiceTime, sigma, truncationPoint, rngs);
     }
 
     public boolean isEndOfArrivals() {
@@ -169,7 +168,7 @@ public class RideCenter extends MultiServer{
         EventType nextType;
         if (oldEvent.postiRichiesti <= 3) {
             nextType = ARRIVAL_SMALL_CENTER;
-        } else if (oldEvent.postiRichiesti <= 4) {
+        } else if (oldEvent.postiRichiesti == 4) {
             nextType = ARRIVAL_MEDIUM_CENTER;
         } else {
             nextType = ARRIVAL_LARGE_CENTER;
@@ -279,7 +278,6 @@ public class RideCenter extends MultiServer{
         servers[completion.serverId].svc = 0;
         servers[completion.serverId].capacitaRimanente = servers[completion.serverId].capacita;
     }
-
 
     public int getNumPosti() {
         rngs.selectStream(4);

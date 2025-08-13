@@ -1,8 +1,6 @@
 package org.pmcsn.configuration;
 
 import org.pmcsn.centers.*;
-import org.pmcsn.controller.BatchImprovedSimulationRunner;
-import org.pmcsn.controller.FiniteImprovedSimulationRunner;
 
 public class CenterFactory {
     private final ConfigurationManager configurationManager = new ConfigurationManager();

@@ -212,7 +212,6 @@ public abstract class MultiServer {
             return;
         }
         double meanResponseTime = area.getNodeArea() / numberOfJobsServed;
-        System.out.printf("[DEBUG][%s.updateObs] serverId=%d, served=%d%n", centerName, serverId, numberOfJobsServed);
         observations.saveObservation(meanResponseTime);
     }
 

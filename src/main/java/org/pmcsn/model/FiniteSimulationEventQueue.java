@@ -7,7 +7,7 @@ public class FiniteSimulationEventQueue extends EventQueue {
     private double lastSaveTime = 0.0;
 
     public FiniteSimulationEventQueue() {
-        this(60);
+        this(10);
     }
 
     public FiniteSimulationEventQueue(int intervalLength) {

@@ -23,19 +23,6 @@ public class MeanStatistics {
         this.meanQueuePopulation = computeMean(stats.meanQueuePopulationList);
     }
 
-    public MeanStatistics(String centerName, double  meanResponseTime, double meanServiceTime, double meanQueueTime
-            , double lambda, double meanSystemPopulation, double meanUtilization, double meanQueuePopulation) {
-        this.centerName = centerName;
-        this.meanResponseTime = meanResponseTime;
-        this.meanServiceTime = meanServiceTime;
-        this.meanQueueTime = meanQueueTime;
-        this.lambda = lambda;
-        this.meanSystemPopulation = meanSystemPopulation;
-        this.meanUtilization = meanUtilization;
-        this.meanQueuePopulation = meanQueuePopulation;
-    }
-
-
     public static double computeMean(List<Double> values) {
         return values.stream().mapToDouble(Double::doubleValue).average().orElseThrow();
     }

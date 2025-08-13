@@ -55,7 +55,7 @@ public class SimpleCenter extends MultiServer{
     }
 
     public boolean isEndOfArrivals() {
-        return isEndOfArrivals;
+        return !isEndOfArrivals;
     }
 
 

@@ -142,7 +142,7 @@ public class BatchSimulationRunner {
             smallCenterObservation.add(new Observations("%s_%d".formatted(smallCenter.getCenterName(), i + 1)));
         }
         mediumCenterObservation = new ArrayList<>();
-        for (int i = 0; i < smallCenter.getServersNumber(); i++) {
+        for (int i = 0; i < mediumCenter.getServersNumber(); i++) {
             mediumCenterObservation.add(new Observations("%s_%d".formatted(mediumCenter.getCenterName(), i + 1)));
         }
         largeCenterObservation = new ArrayList<>();
@@ -275,9 +275,6 @@ public class BatchSimulationRunner {
     }
 
     private boolean isDone() {
-        System.out.println("[DEBUG] isDone: small=" + smallCenter.isDone()
-                + ", medium=" + mediumCenter.isDone()
-                + ", large=" + largeCenter.isDone());
                 return smallCenter.isDone()
                 && mediumCenter.isDone()
                 && largeCenter.isDone();

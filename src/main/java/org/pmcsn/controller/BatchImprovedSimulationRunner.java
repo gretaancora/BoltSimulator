@@ -45,7 +45,7 @@ public class BatchImprovedSimulationRunner {
     EventQueue events = null;
 
     public BatchImprovedSimulationRunner(int batchSize, int numBatches, int warmupThreshold) {
-        this(batchSize, numBatches, warmupThreshold, 123456789L, 480);
+        this(batchSize, numBatches, warmupThreshold, 123456789L, 20);
     }
 
     public BatchImprovedSimulationRunner(int batchSize, int numBatches, int warmupThreshold, long seed, int intervalLength) {
@@ -56,7 +56,7 @@ public class BatchImprovedSimulationRunner {
         this.intervalLength = intervalLength;
     }
 
-    public List<BatchStatistics> runBatchSimulation(boolean approximateServiceAsExponential) throws Exception {
+    public void runBatchSimulation(boolean approximateServiceAsExponential) throws Exception {
         initCenters(approximateServiceAsExponential);
 
         String simulationType = getSimulationType(approximateServiceAsExponential);
@@ -143,7 +143,7 @@ public class BatchImprovedSimulationRunner {
             modelVerification(simulationType);
         }
 
-        return getBatchStatistics();
+        getBatchStatistics();
     }
 
     private void initObservations(String path) {
@@ -153,7 +153,7 @@ public class BatchImprovedSimulationRunner {
             smallCenterObservation.add(new Observations("%s_%d".formatted(smallCenter.getCenterName(), i + 1)));
         }
         mediumCenterObservation = new ArrayList<>();
-        for (int i = 0; i < smallCenter.getServersNumber(); i++) {
+        for (int i = 0; i < mediumCenter.getServersNumber(); i++) {
             mediumCenterObservation.add(new Observations("%s_%d".formatted(mediumCenter.getCenterName(), i + 1)));
         }
         largeCenterObservation = new ArrayList<>();
@@ -183,13 +183,12 @@ public class BatchImprovedSimulationRunner {
         rideCenter.stopWarmup(time);
     }
 
-    private List<BatchStatistics> getBatchStatistics() {
+    private void getBatchStatistics() {
         List<BatchStatistics> batchStatistics = new ArrayList<>();
         batchStatistics.add(smallCenter.getBatchStatistics());
         batchStatistics.add(mediumCenter.getBatchStatistics());
         batchStatistics.add(largeCenter.getBatchStatistics());
         batchStatistics.add(rideCenter.getBatchStatistics());
-        return batchStatistics;
     }
 
 
